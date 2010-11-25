@@ -1,0 +1,26 @@
+<oaf_info>
+    <oaf_server iid="OAFIID:GnomePipeApplet_Factory" type="exe"
+            location="/usr/lib/gnome-panel/gnome-pipe-applet">
+        <oaf_attribute name="repo_ids" type="stringv">
+            <item value="IDL:Bonobo/GenericFactory:1.0"/>
+            <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+        <oaf_attribute name="name" type="string"
+                value="Gnome Pipe Applet Factory"/>
+        <oaf_attribute name="description" type="string"
+                value="Factory to create a gnome pipe applet"/>
+    </oaf_server>
+
+    <oaf_server iid="OAFIID:GnomePipeApplet" type="factory"
+            location="OAFIID:GnomePipeApplet_Factory">
+    <oaf_attribute name="repo_ids" type="stringv">
+        <item value="IDL:GNOME/Vertigo/PanelAppletShell:1.0"/>
+        <item value="IDL:Bonobo/Control:1.0"/>
+        <item value="IDL:Bonobo/Unknown:1.0"/>
+    </oaf_attribute>
+        <oaf_attribute name="name" type="string" value="Gnome Pipe Applet"/>
+        <oaf_attribute name="description" type="string" value="A pipe applet"/>
+        <oaf_attribute name="panel:category" type="string" value="Amusements"/>
+        <oaf_attribute name="panel:icon" type="string" value="gnome-pipe-applet.png"/>
+    </oaf_server>
+</oaf_info>
