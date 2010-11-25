@@ -32,10 +32,6 @@ void *pipe_thread(void *data) {
             else if(i > 0) buffer[i - 1] = '\0';
             else buffer[0] = '\0';
 
-            FILE *out = fopen("/tmp/debug", "a");
-            fprintf(out, "'%s'\n", buffer);
-            fclose(out);
-
             /* Set label */
             gtk_label_set_text(label, buffer);
         }
