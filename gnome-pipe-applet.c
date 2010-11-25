@@ -12,14 +12,14 @@ void *pipe_thread(void *data) {
     char *buffer = malloc(buffer_size);
     int i;
 
-    /* Try to open the pipe */
-    while(!pipe_in) {
-        pipe_in = fopen("/tmp/gnome-pipe-applet", "r");
-        sleep(1);
-    }
-
     /* Run... */
     while(1) {
+        /* Try to open the pipe */
+        while(!pipe_in || feof(pipe_in) || ferror(pipe_in)) {
+            pipe_in = fopen("/tmp/gnome-pipe-applet", "r");
+            sleep(1);
+        }
+
         char *result = fgets(buffer, buffer_size, pipe_in);
 
         if(result) {
@@ -39,6 +39,8 @@ void *pipe_thread(void *data) {
             /* Set label */
             gtk_label_set_text(label, buffer);
         }
+
+        pthread_yield();
     }
 
     /* Not executed but my intentions are good */
