@@ -46,20 +46,20 @@ void *pipe_thread(void *data) {
 
 static gboolean pipe_applet_fill(PanelApplet *applet, const gchar *iid,
         gpointer data) {
-	GtkWidget *label;
+    GtkWidget *label;
     pthread_t thread;
 
-	if (strcmp (iid, "OAFIID:GnomePipeApplet") != 0)
-		return FALSE;
+    if (strcmp (iid, "OAFIID:GnomePipeApplet") != 0)
+        return FALSE;
 
-	label = gtk_label_new("Waiting for pipe...");
-	gtk_container_add(GTK_CONTAINER (applet), label);
-	gtk_widget_show_all(GTK_WIDGET (applet));
+    label = gtk_label_new("Waiting for pipe...");
+    gtk_container_add(GTK_CONTAINER (applet), label);
+    gtk_widget_show_all(GTK_WIDGET (applet));
 
     pipe_in = 0;
     pthread_create(&thread, NULL, pipe_thread, label);
 
-	return TRUE;
+    return TRUE;
 }
 
 PANEL_APPLET_BONOBO_FACTORY(

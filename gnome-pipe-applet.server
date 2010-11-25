@@ -21,6 +21,7 @@
         <oaf_attribute name="name" type="string" value="Gnome Pipe Applet"/>
         <oaf_attribute name="description" type="string" value="A pipe applet"/>
         <oaf_attribute name="panel:category" type="string" value="Amusements"/>
-        <oaf_attribute name="panel:icon" type="string" value="gnome-pipe-applet.png"/>
+        <oaf_attribute name="panel:icon" type="string"
+                value="gnome-pipe-applet.png"/>
     </oaf_server>
 </oaf_info>
