@@ -73,6 +73,8 @@ void wait_for_pipe(pipe_data *data) {
         if(pipe_name) {
             data->pipe = fopen(pipe_name, "r");
             g_free(pipe_name);
+        } else {
+            gtk_label_set_text(data->label, "No file selected");
         }
 
         sleep(1);
