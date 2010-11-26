@@ -1,4 +1,4 @@
-APPLET=gnome-pipe-applet
+APPLET=gnome-socket-applet
 FLAGS=$(shell pkg-config --cflags --libs libpanelapplet-2.0 gthread-2.0)
 
 $(APPLET): $(APPLET).c
