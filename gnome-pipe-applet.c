@@ -57,12 +57,18 @@ static const BonoboUIVerb context_menu_verbs[] = {
         BONOBO_UI_VERB_END
 };
 
+/* Check if the pipe is broken */
+int pipe_broken(const pipe_data *data) {
+    if(!data->pipe || feof(data->pipe) || ferror(data->pipe)) return 1;
+    else return 0;
+}
+
 /* Wait for the pipe to be opened */
 void wait_for_pipe(pipe_data *data) {
     char *pipe_name;
 
     /* Try to open the pipe */
-    while(!data->pipe || feof(data->pipe) || ferror(data->pipe)) {
+    while(pipe_broken(data)) {
         pipe_name = panel_applet_gconf_get_string(data->applet, PIPE_NAME, 0);
         if(pipe_name) {
             data->pipe = fopen(pipe_name, "r");
@@ -78,6 +84,7 @@ void *pipe_thread(void *pthread_data) {
     pipe_data *data = (pipe_data *) pthread_data;
     int buffer_size = 1024;
     char *buffer = malloc(buffer_size);
+    char *result;
     int i;
 
     /* Run... */
@@ -85,7 +92,7 @@ void *pipe_thread(void *pthread_data) {
         /* Try to open the pipe */
         wait_for_pipe(data);
 
-        char *result = fgets(buffer, buffer_size, data->pipe);
+        result = fgets(buffer, buffer_size, data->pipe);
 
         if(result) {
             /* Fix end of string */
