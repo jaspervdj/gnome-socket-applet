@@ -89,13 +89,9 @@ void *pipe_thread(void *pthread_data) {
 
         if(result) {
             /* Fix end of string */
-            i = 0;
-            while(i < buffer_size && buffer[i] != '\n' && buffer[i] != '\0') {
-                i++;
+            for(i = 0; i < buffer_size; i++) {
+                if(buffer[i] == '\n') buffer[i] = '\0';
             }
-            if(i < buffer_size) buffer[i] = '\0';
-            else if(i > 0) buffer[i - 1] = '\0';
-            else buffer[0] = '\0';
 
             /* Set label */
             gtk_label_set_text(data->label, buffer);
