@@ -1,5 +1,5 @@
-gnome-pipe-applet
-=================
+gnome-socket-applet
+===================
 
 Installing:
 
