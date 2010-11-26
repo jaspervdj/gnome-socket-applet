@@ -41,6 +41,7 @@ static void display_select_file_dialog(BonoboUIComponent *uic,
 
         /* Set the pipe name */
         panel_applet_gconf_set_string(data->applet, PIPE_NAME, pipe_name);
+        if(data->pipe) fclose(data->pipe);
         data->pipe = 0;
 
         g_free(pipe_name);
@@ -63,8 +64,11 @@ void wait_for_pipe(pipe_data *data) {
     /* Try to open the pipe */
     while(!data->pipe || feof(data->pipe) || ferror(data->pipe)) {
         pipe_name = panel_applet_gconf_get_string(data->applet, PIPE_NAME, 0);
-        data->pipe = fopen(pipe_name, "r");
-        g_free(pipe_name);
+        if(pipe_name) {
+            data->pipe = fopen(pipe_name, "r");
+            g_free(pipe_name);
+        }
+
         sleep(1);
     }
 }
