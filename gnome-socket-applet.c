@@ -29,7 +29,7 @@ void *socket_thread(void *pthread_data) {
     bzero(&self, sizeof(self));
     self.sin_family = AF_INET;
     self.sin_port = htons(atoi(getenv("GNOME_SOCKET_APPLET_PORT")));
-    self.sin_addr.s_addr = INADDR_ANY;
+    self.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
     /* Bind and listen */
     bind(sock_fd, (struct sockaddr *) &self, sizeof(self));
@@ -44,17 +44,16 @@ void *socket_thread(void *pthread_data) {
         /* Accept the socket */
         client_fd = accept(sock_fd,
                 (struct sockaddr *) &client_addr, &client_addr_size);
+        if(client_fd != -1) {
+            int result;
 
-        /* Check that the message comes from localhost */
-        inet_ntop(AF_INET, (void *) &client_addr.sin_addr, buffer, buffer_size);
-        if(!strcmp(buffer, getenv("GNOME_SOCKET_APPLET_HOST"))) {
             /* Receive and set text */
             bzero(buffer, buffer_size);
-            recv(client_fd, buffer, buffer_size - 1, 0);
-            gtk_label_set_text(data->label, buffer);
-        }
+            result = recv(client_fd, buffer, buffer_size - 1, 0);
+            if(result > 0) gtk_label_set_text(data->label, buffer);
 
-        close(client_fd);
+            close(client_fd);
+        }
     }
 
     close(sock_fd);
