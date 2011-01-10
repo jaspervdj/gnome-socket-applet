@@ -7,7 +7,6 @@ Installation
 First, put this somewhere in your `.profile` or similar:
 
     export GNOME_SOCKET_APPLET_PORT=13525
-    export GNOME_SOCKET_APPLET_HOST=127.0.0.1
 
 Installing:
 
@@ -30,12 +29,13 @@ using the `logHook`.
 
     writeLog :: String -> IO ()
     writeLog message = safely $ do
-        host <- getEnv "GNOME_SOCKET_APPLET_HOST"
         port <- getEnv "GNOME_SOCKET_APPLET_PORT"
-        h <- connectTo host $ PortNumber $ fromIntegral $ read port
-        hPutStr h message
-        hFlush h
-        hClose h
+        addrInfo <- head <$> getAddrInfo Nothing (Just "localhost") (Just port)
+        sock <- socket (addrFamily addrInfo) Stream defaultProtocol
+        connect sock $ addrAddress addrInfo
+        handle <- socketToHandle sock WriteMode
+        hPutStr handle message
+        hClose handle
       where
         safely x = catch x $ const $ return ()
 
